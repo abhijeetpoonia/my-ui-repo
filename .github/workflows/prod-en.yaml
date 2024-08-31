@@ -36,12 +36,8 @@ jobs:
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
           cd my-node-project &&
-             npm install
-
-      - name: Start the application
-        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
-        run: |
-          npm start
+             npm install &&
+             npm start
 
       - name: List all files in Prod-EN directory
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
