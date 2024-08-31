@@ -35,12 +35,8 @@ jobs:
       - name: Navigate to Node Project Directory
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
-          cd my-node-project
-
-      - name: Install npm dependencies
-        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
-        run: |
-          npm install
+          cd my-node-project &&
+             npm install
 
       - name: Start the application
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
