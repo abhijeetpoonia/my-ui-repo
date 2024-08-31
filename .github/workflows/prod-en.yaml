@@ -12,23 +12,25 @@ jobs:
     steps:
       - name: Echo Payload Commit Message from Main
         run: |
-          echo "Payload commit message from main: ${{ github.event.client_payload.commit_message }}"
-          echo "Prod-EN commit message from payload: ${{ github.event.client_payload.sc_ui_dispatch_commits['Prod-EN'] }}"
+          echo "Payload commit message from main: ${{ github.event.client_payload.data[0].commit_message }}"
 
       - name: Checkout code to Prod-EN
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         uses: actions/checkout@v3
         with:
-          ref: Prod-EN  # Ensure the branch exists and is correctly named
+          ref: Prod-EN  # Checkout to the Prod-EN branch
 
-      - name: Print Payload and Repository Commit Messages
+      - name: Print actual commit message and hash for Prod-EN
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
-          # Print Payload Commit Messages
-          echo "Payload commit message from payload: ${{ github.event.client_payload.commit_message }}"
-          echo "Prod-EN commit message from payload: ${{ github.event.client_payload.sc_ui_dispatch_commits['Prod-EN'] }}"
-          
-          # Print Repository Commit Messages
           echo "Actual commit message for Prod-EN: $(git log -1 --format=%s)"
           echo "Current HEAD commit hash for Prod-EN: $(git rev-parse HEAD)"
+        
+      - name: Print payload commit message for Prod-EN
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
+        run: |
+          echo "Payload commit message for Prod-EN: ${{ github.event.client_payload.data[0].sc_ui_dispatch_commits['Prod-EN'] }}"
+        shell: bash
 
       - name: Install npm dependencies
         run: |
