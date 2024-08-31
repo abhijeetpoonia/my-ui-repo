@@ -1,4 +1,4 @@
 // build.js
 
-console.log("Heyy!! This build PROD-EN  complete");
+console.log("Heyy!! This build PROD-FR  complete");
 
