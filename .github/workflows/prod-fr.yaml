@@ -12,32 +12,34 @@ jobs:
     steps:
       - name: Echo Payload Commit Message from Main
         run: |
-          echo "Payload commit message from main: ${{ github.event.client_payload.commit_message }}"
+          echo "Payload commit message from main: ${{ github.event.client_payload.data[0].commit_message }}"
 
-      # Checkout and process Prod-FR branch
       - name: Checkout code to Prod-FR
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-FR' }}
         uses: actions/checkout@v3
         with:
-          ref: Prod-FR  # Checkout to the Prod-FR branch
+          ref: Prod-FR
 
       - name: Print actual commit message and hash for Prod-FR
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-FR' }}
         run: |
           echo "Actual commit message for Prod-FR: $(git log -1 --format=%s)"
           echo "Current HEAD commit hash for Prod-FR: $(git rev-parse HEAD)"
           
       - name: Print payload commit message for Prod-FR
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-FR' }}
         run: |
-          echo "Payload commit message for Prod-FR: ${{ github.event.client_payload.sc_ui_dispatch_commits['Prod-FR'] }}"
+          echo "Payload commit message for Prod-FR: ${{ github.event.client_payload.data[0].sc_ui_dispatch_commits['Prod-FR'] }}"
 
-      - name: Install npm dependencies
+      - name: Navigate to Node Project Directory
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-FR' }}
         run: |
-          npm install
-          
-      - name: Start the application
-        run: |
+          cd my-node-project &&
+          npm install &&
           npm start
-          
+
       - name: List all files in Prod-FR directory
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-FR' }}
         run: |
           echo "Files in Prod-FR:"
           ls -ltr
