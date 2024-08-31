@@ -18,7 +18,7 @@ jobs:
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         uses: actions/checkout@v3
         with:
-          ref: Prod-EN  # Checkout to the Prod-EN branch
+          ref: Prod-EN
 
       - name: Print actual commit message and hash for Prod-EN
         if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
@@ -32,15 +32,23 @@ jobs:
           echo "Payload commit message for Prod-EN: ${{ github.event.client_payload.data[0].sc_ui_dispatch_commits['Prod-EN'] }}"
         shell: bash
 
+      - name: Navigate to Node Project Directory
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
+        run: |
+          cd my-node-project
+
       - name: Install npm dependencies
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
           npm install
-          
+
       - name: Start the application
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
           npm start
-          
+
       - name: List all files in Prod-EN directory
+        if: ${{ github.event.client_payload.data[0].trigger-branch == 'Prod-EN' }}
         run: |
           echo "Files in Prod-EN:"
           ls -ltr
