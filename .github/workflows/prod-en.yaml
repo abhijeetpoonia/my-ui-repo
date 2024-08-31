@@ -14,20 +14,21 @@ jobs:
         run: |
           echo "Payload commit message from main: ${{ github.event.client_payload.commit_message }}"
 
-      # Checkout and process Prod-EN branch
       - name: Checkout code to Prod-EN
         uses: actions/checkout@v3
         with:
-          ref: Prod-EN  # Checkout to the Prod-EN branch
+          ref: Prod-EN
+
+      - name: Print Payload
+        run: |
+          echo "Full Payload: ${{ toJson(github.event.client_payload) }}"
+          echo "Commit message: ${{ github.event.client_payload.commit_message }}"
+          echo "Prod-EN commit message: ${{ github.event.client_payload.sc_ui_dispatch_commits['Prod-EN'] }}"
 
       - name: Print actual commit message and hash for Prod-EN
         run: |
           echo "Actual commit message for Prod-EN: $(git log -1 --format=%s)"
           echo "Current HEAD commit hash for Prod-EN: $(git rev-parse HEAD)"
-          
-      - name: Print payload commit message for Prod-EN
-        run: |
-          echo "Payload commit message for Prod-EN: ${{ github.event.client_payload.sc_ui_dispatch_commits['Prod-EN'] }}"
 
       - name: Install npm dependencies
         run: |
